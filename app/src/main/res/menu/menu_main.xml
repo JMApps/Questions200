@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/favoriteList"
+        android:checkable="true"
+        android:icon="@drawable/ic_star_favorites_false"
+        android:title="@string/action_favorites"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/settings"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/aboutUs"
+        android:title="@string/action_about_us"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/rateApp"
+        android:title="@string/action_rate"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/shareLink"
+        android:title="@string/action_share"
+        app:showAsAction="never" />
+</menu >
