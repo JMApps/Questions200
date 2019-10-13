@@ -2,6 +2,8 @@ package jmapps.questions200.presentation.ui.chapters
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +13,8 @@ import jmapps.questions200.R
 import jmapps.questions200.data.database.DatabaseLists
 import kotlinx.android.synthetic.main.fragment_chapters.view.*
 
-class ChaptersFragment : BottomSheetDialogFragment(), AdapterChapters.OnItemChapterClick {
+class ChaptersFragment : BottomSheetDialogFragment(), AdapterChapters.OnItemChapterClick,
+    TextWatcher {
 
     private lateinit var rootChapters: View
     private lateinit var chapters: MutableList<ModelChapters>
@@ -30,7 +33,16 @@ class ChaptersFragment : BottomSheetDialogFragment(), AdapterChapters.OnItemChap
         adapterChapters = AdapterChapters(chapters, this)
         rootChapters.rvListChapters.adapter = adapterChapters
 
+        rootChapters.etSearchChapter.addTextChangedListener(this)
         return rootChapters
+    }
+
+    override fun afterTextChanged(s: Editable?) {}
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        adapterChapters.filter.filter(s)
     }
 
     override fun onAttach(context: Context) {
@@ -42,8 +54,8 @@ class ChaptersFragment : BottomSheetDialogFragment(), AdapterChapters.OnItemChap
         }
     }
 
-    override fun onItemClick(position: Int) {
-        getChapterItem.getItemPosition(position)
+    override fun onItemClick(idPosition: Int) {
+        getChapterItem.getItemPosition(idPosition)
         dialog?.dismiss()
     }
 

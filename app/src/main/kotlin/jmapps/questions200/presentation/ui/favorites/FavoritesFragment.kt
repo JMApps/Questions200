@@ -18,8 +18,7 @@ class FavoritesFragment : BottomSheetDialogFragment(), AdapterFavorites.OnItemFa
     private lateinit var adapterFavorites: AdapterFavorites
     private lateinit var getFavoriteItem: GetFavoriteItem
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         rootFavorites = inflater.inflate(R.layout.fragment_favorites, container, false)
 

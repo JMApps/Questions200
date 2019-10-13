@@ -4,10 +4,11 @@ import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.google.android.material.appbar.AppBarLayout
 import jmapps.questions200.data.database.DatabaseAsset
 import jmapps.questions200.presentation.mvp.other.OtherContract
@@ -20,7 +21,7 @@ import jmapps.questions200.presentation.ui.settings.SettingsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OtherContract.OtherView, ChaptersFragment.GetChapterItem,
-    FavoritesFragment.GetFavoriteItem {
+    FavoritesFragment.GetFavoriteItem, View.OnClickListener {
 
     private lateinit var database: SQLiteDatabase
     private lateinit var otherPresenter: OtherPresenterImpl
@@ -45,14 +46,15 @@ class MainActivity : AppCompatActivity(), OtherContract.OtherView, ChaptersFragm
         appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             if (verticalOffset < 0) {
                 fabChapters.hide()
+                fabFavorites.hide()
             } else {
                 fabChapters.show()
+                fabFavorites.show()
             }
         })
 
-        fabChapters.setOnClickListener {
-            otherPresenter.getListChapters()
-        }
+        fabChapters.setOnClickListener(this)
+        fabFavorites.setOnClickListener(this)
 
         loadPosition()
         openDatabase()
@@ -65,10 +67,6 @@ class MainActivity : AppCompatActivity(), OtherContract.OtherView, ChaptersFragm
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-
-            R.id.favoriteList -> {
-                otherPresenter.getFavoriteList()
-            }
 
             R.id.settings -> {
                 otherPresenter.getSettings()
@@ -87,6 +85,14 @@ class MainActivity : AppCompatActivity(), OtherContract.OtherView, ChaptersFragm
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.fabChapters -> otherPresenter.getListChapters()
+
+            R.id.fabFavorites -> otherPresenter.getFavoriteList()
+        }
     }
 
     override fun getItemPosition(position: Int) {
