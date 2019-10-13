@@ -6,6 +6,7 @@ import android.content.ClipData.newPlainText
 import android.content.ClipboardManager
 import android.content.ContentValues
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.text.Html
@@ -16,7 +17,6 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import jmapps.questions200.R
 import kotlinx.android.synthetic.main.dialog_footnote.view.*
-import java.util.*
 
 class MainPresenterImpl(
     private val context: Context?,
@@ -31,6 +31,9 @@ class MainPresenterImpl(
     private lateinit var strFootnoteId: String
     private lateinit var strFootnoteContent: String
 
+    private var myClipboard: ClipboardManager? = null
+    private var myClip: ClipData? = null
+
     override fun showContentFromDatabase() {
         try {
             val mainCursor: Cursor = database.query(
@@ -38,7 +41,8 @@ class MainPresenterImpl(
                 arrayOf("Question_number", "Question_content", "Answer_content"),
                 "_id = ?",
                 arrayOf("$sectionNumber"),
-                null, null, null)
+                null, null, null
+            )
 
             if (!mainCursor.isClosed && mainCursor.moveToFirst()) {
 
@@ -144,18 +148,15 @@ class MainPresenterImpl(
     }
 
     override fun copyContent() {
-        val clipboardManager =
-            Objects.requireNonNull(context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+        myClipboard = context?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
 
-        val copyData: ClipData = newPlainText(
+        myClip = newPlainText(
             "", Html.fromHtml(
                 "$strQuestionNumber<br/>$strQuestionContent<p/>ОТВЕТ<br/>$strAnswerContent"
             )
         )
 
-        if (clipboardManager != null) {
-            clipboardManager.primaryClip = copyData
-            mainView?.showCopyToast()
-        }
+        myClipboard?.setPrimaryClip(myClip!!)
+        mainView?.showCopyToast()
     }
 }
