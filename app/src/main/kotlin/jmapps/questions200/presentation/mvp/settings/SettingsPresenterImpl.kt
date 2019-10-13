@@ -34,11 +34,11 @@ class SettingsPresenterImpl(private val settingsView: SettingsContract.SettingsV
     override fun typeFaceMode(numberMode: Int) {
         when (numberMode) {
 
-            1 -> settingsView?.typeFace("")
+            1 -> settingsView?.typeFace("font/gilroy.ttf")
 
-            2 -> settingsView?.typeFace("")
+            2 -> settingsView?.typeFace("font/serif.ttf")
 
-            3 -> settingsView?.typeFace("")
+            3 -> settingsView?.typeFace("font/roboto.ttf")
         }
     }
 
