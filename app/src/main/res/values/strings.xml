@@ -4,6 +4,7 @@
     <string name="action_favorites">Избранное</string>
     <string name="action_favorite_list_empty">Нет избранных глав</string>
     <string name="action_chapters">Главы</string>
+    <string name="action_search_by_chapters">Поиск по главам…</string>
     <string name="action_settings">Настройки</string>
     <string name="action_about_us">О нас</string>
     <string name="action_share">Поделиться</string>
