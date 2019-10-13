@@ -3,9 +3,7 @@ package jmapps.questions200.presentation.ui.main
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Color
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
@@ -14,29 +12,28 @@ import android.widget.CompoundButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import jmapps.questions200.R
 import jmapps.questions200.data.database.DatabaseAsset
 import jmapps.questions200.data.file.TypeFace
 import jmapps.questions200.presentation.mvp.main.MainContract
 import jmapps.questions200.presentation.mvp.main.MainPresenterImpl
+import jmapps.questions200.presentation.mvp.settings.SettingsContract
+import jmapps.questions200.presentation.mvp.settings.SettingsPresenterImpl
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class PlaceholderFragment : Fragment(), MainContract.MainView,
     CompoundButton.OnCheckedChangeListener, View.OnClickListener,
-    SharedPreferences.OnSharedPreferenceChangeListener {
+    SharedPreferences.OnSharedPreferenceChangeListener, SettingsContract.SettingsView {
 
     private lateinit var rootMain: View
     private var sectionNumber: Int? = null
 
     private lateinit var mainPresenterImpl: MainPresenterImpl
+    private lateinit var settingsPresenterImpl: SettingsPresenterImpl
 
     private lateinit var preferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
-
-    private var backgroundColor: Int? = null
-    private var textColor: Int? = null
-    private var selectFont: String? = null
-    private var textSize: Float? = null
 
     companion object {
 
@@ -61,15 +58,16 @@ class PlaceholderFragment : Fragment(), MainContract.MainView,
 
         sectionNumber = arguments?.getInt(ARG_SECTION_NUMBER)
 
-        PreferenceManager.getDefaultSharedPreferences(context)
-            .registerOnSharedPreferenceChangeListener(this)
-
         preferences = PreferenceManager.getDefaultSharedPreferences(context)
         editor = preferences.edit()
+
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .registerOnSharedPreferenceChangeListener(this)
 
         val database: SQLiteDatabase = DatabaseAsset(context).readableDatabase
 
         mainPresenterImpl = MainPresenterImpl(context, sectionNumber, this, database)
+        settingsPresenterImpl = SettingsPresenterImpl(this)
         mainPresenterImpl.showContentFromDatabase()
 
         rootMain.tbFavorites.isChecked =
@@ -79,21 +77,9 @@ class PlaceholderFragment : Fragment(), MainContract.MainView,
 
         backgroundMode()
         fontMode()
-        textSize()
+        sizeMode()
 
         return rootMain
-    }
-
-    override fun onClick(v: View?) {
-        mainPresenterImpl.copyContent()
-    }
-
-    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        mainPresenterImpl.addRemoveFavorite(isChecked)
-    }
-
-    override fun showDatabaseExceptions(e: String) {
-        Toast.makeText(context, e, Toast.LENGTH_LONG).show()
     }
 
     override fun showQuestionNumber(number: String) {
@@ -116,6 +102,18 @@ class PlaceholderFragment : Fragment(), MainContract.MainView,
         )
     }
 
+    override fun onClick(v: View?) {
+        mainPresenterImpl.copyContent()
+    }
+
+    override fun showCopyToast() {
+        Toast.makeText(context, "Скопировано в буфер", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+        mainPresenterImpl.addRemoveFavorite(isChecked)
+    }
+
     override fun showFavoriteState(state: Boolean) {
         if (state) {
             Toast.makeText(context, "Добавлено в избранное", Toast.LENGTH_LONG).show()
@@ -124,106 +122,67 @@ class PlaceholderFragment : Fragment(), MainContract.MainView,
         }
     }
 
-    override fun saveFavoriteNumber(keyFavorite: String, state: Boolean) {
-        editor.putBoolean(keyFavorite, state).apply()
+    override fun showDatabaseExceptions(e: String) {
+        Toast.makeText(context, e, Toast.LENGTH_LONG).show()
     }
 
-    override fun showCopyToast() {
-        Toast.makeText(context, "Скопировано в буфер", Toast.LENGTH_LONG).show()
+    override fun colorMode(backgroundColor: Int, textColor: Int) {
+        rootMain.mainConstraint.setBackgroundColor(backgroundColor)
+        rootMain.tvQuestionContent.setTextColor(textColor)
+        rootMain.tvAnswerContent.setTextColor(textColor)
+    }
+
+    override fun typeFace(nameTypeFace: String) {
+        rootMain.tvQuestionContent.typeface = TypeFace()[context, nameTypeFace]
+        rootMain.tvAnswerContent.typeface = TypeFace()[context, nameTypeFace]
+    }
+
+    override fun textSize(textSize: Float) {
+        rootMain.tvQuestionContent.textSize = textSize!!
+        rootMain.tvAnswerContent.textSize = textSize
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         backgroundMode()
         fontMode()
-        textSize()
+        sizeMode()
+    }
+
+    override fun saveFavoriteNumber(keyFavorite: String, state: Boolean) {
+        editor.putBoolean(keyFavorite, state).apply()
     }
 
     private fun backgroundMode() {
         val whiteMode = preferences.getBoolean("key_white_state", true)
         val sepiaMode = preferences.getBoolean("key_sepia_state", false)
-        val nightMode = preferences.getBoolean("key_night_mode", false)
+        val nightMode = preferences.getBoolean("key_night_mode_state", false)
 
         when (true) {
-            whiteMode -> {
-                backgroundColor = preferences.getInt(
-                    "key_background_white",
-                    Color.argb(255, 244, 244, 244)
-                )
-                textColor = preferences.getInt(
-                    "key_text_white",
-                    Color.argb(255, 87, 87, 87)
-                )
-            }
-            sepiaMode -> {
-                backgroundColor = preferences.getInt(
-                    "key_background_sepia",
-                    Color.argb(255, 222, 210, 112)
-                )
-                textColor = preferences.getInt(
-                    "key_text_sepia",
-                    Color.argb(255, 112, 112, 112)
-                )
-            }
-            nightMode -> {
-                backgroundColor = preferences.getInt(
-                    "key_background_night",
-                    Color.argb(255, 44, 44, 44)
-                )
-                textColor = preferences.getInt(
-                    "key_text_night",
-                    Color.argb(255, 184, 184, 184)
-                )
 
-            }
+            whiteMode -> settingsPresenterImpl.backgroundMode(1)
+
+            sepiaMode -> settingsPresenterImpl.backgroundMode(2)
+
+            nightMode -> settingsPresenterImpl.backgroundMode(3)
         }
-        rootMain.mainConstraint.setBackgroundColor(backgroundColor!!)
-        rootMain.tvQuestionContent.setTextColor(textColor!!)
-        rootMain.tvAnswerContent.setTextColor(textColor!!)
     }
 
     private fun fontMode() {
-        val fontOne = preferences.getBoolean("key_font_one", true)
-        val fontTwo = preferences.getBoolean("key_font_two", false)
-        val fontThree = preferences.getBoolean("key_font_three", false)
+        val fontOne = preferences.getBoolean("key_font_one_state", true)
+        val fontTwo = preferences.getBoolean("key_font_two_state", false)
+        val fontThree = preferences.getBoolean("key_font_three_state", false)
 
         when (true) {
-            fontOne -> {
-                selectFont = "fonts/gilroy.ttf"
-            }
-            fontTwo -> {
-                selectFont = "fonts/serif.ttf"
-            }
-            fontThree -> {
-                selectFont = "fonts/roboto.ttf"
-            }
+
+            fontOne -> settingsPresenterImpl.typeFaceMode(1)
+
+            fontTwo -> settingsPresenterImpl.typeFaceMode(2)
+
+            fontThree -> settingsPresenterImpl.typeFaceMode(3)
         }
-        rootMain.tvQuestionContent.typeface = TypeFace()[context!!, selectFont!!]
-        rootMain.tvAnswerContent.typeface = TypeFace()[context!!, selectFont!!]
     }
 
-    private fun textSize() {
-
-        when (preferences.getInt("key_text_size_progress", 2)) {
-            0 -> {
-                textSize = 14f
-            }
-            1 -> {
-                textSize = 16f
-            }
-            2 -> {
-                textSize = 18f
-            }
-            3 -> {
-                textSize = 20f
-            }
-            4 -> {
-                textSize = 24f
-            }
-            5 -> {
-                textSize = 30f
-            }
-        }
-        rootMain.tvQuestionContent.textSize = textSize!!
-        rootMain.tvAnswerContent.textSize = textSize!!
+    private fun sizeMode() {
+        settingsPresenterImpl.textSizeMode(preferences.getInt("key_text_size_progress", 2))
     }
 }

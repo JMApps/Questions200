@@ -3,23 +3,21 @@ package jmapps.questions200.presentation.ui.settings
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
+import android.widget.RadioGroup
 import android.widget.SeekBar
+import androidx.preference.PreferenceManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jmapps.questions200.R
-import jmapps.questions200.presentation.mvp.settings.SettingsContract
-import jmapps.questions200.presentation.mvp.settings.SettingsPresenterImpl
+import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
-class SettingsFragment : BottomSheetDialogFragment(), SettingsContract.SettingsView,
-    CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener {
+class SettingsFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener,
+    RadioGroup.OnCheckedChangeListener {
 
     private lateinit var rootSettings: View
-    private lateinit var settingsPresenterImpl: SettingsPresenterImpl
 
     private lateinit var preferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
@@ -32,68 +30,36 @@ class SettingsFragment : BottomSheetDialogFragment(), SettingsContract.SettingsV
         preferences = PreferenceManager.getDefaultSharedPreferences(context)
         editor = preferences.edit()
 
-        settingsPresenterImpl = SettingsPresenterImpl(this)
-
         rootSettings.rbWhiteMode.isChecked = preferences.getBoolean("key_white_state", true)
         rootSettings.rbSepiaMode.isChecked = preferences.getBoolean("key_sepia_state", false)
-        rootSettings.rbNightMode.isChecked = preferences.getBoolean("key_night_mode", false)
+        rootSettings.rbNightMode.isChecked = preferences.getBoolean("key_night_mode_state", false)
 
-        rootSettings.rbWhiteMode.setOnCheckedChangeListener(this)
-        rootSettings.rbSepiaMode.setOnCheckedChangeListener(this)
-        rootSettings.rbNightMode.setOnCheckedChangeListener(this)
-
-        rootSettings.rbFontOne.isChecked = preferences.getBoolean("key_font_one", true)
-        rootSettings.rbFontTwo.isChecked = preferences.getBoolean("key_font_two", false)
-        rootSettings.rbFontThree.isChecked = preferences.getBoolean("key_font_three", false)
-
-        rootSettings.rbFontOne.setOnCheckedChangeListener(this)
-        rootSettings.rbFontTwo.setOnCheckedChangeListener(this)
-        rootSettings.rbFontThree.setOnCheckedChangeListener(this)
+        rootSettings.rbFontOne.isChecked = preferences.getBoolean("key_font_one_state", true)
+        rootSettings.rbFontTwo.isChecked = preferences.getBoolean("key_font_two_state", false)
+        rootSettings.rbFontThree.isChecked = preferences.getBoolean("key_font_three_state", false)
 
         rootSettings.sbTextSize.progress = preferences.getInt("key_text_size_progress", 2)
+
+        rootSettings.rgMode.setOnCheckedChangeListener(this)
+        rootSettings.rgFont.setOnCheckedChangeListener(this)
         rootSettings.sbTextSize.setOnSeekBarChangeListener(this)
 
         return rootSettings
     }
 
-    override fun whiteMode(backgroundColor: Int, textColor: Int) {
-        editor.putInt("key_background_white", backgroundColor).apply()
-        editor.putInt("key_text_white", textColor).apply()
-    }
+    override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
+        when (group?.id) {
 
-    override fun sepiaMode(backgroundColor: Int, textColor: Int) {
-        editor.putInt("key_background_sepia", backgroundColor).apply()
-        editor.putInt("key_text_sepia", textColor).apply()
-    }
-
-    override fun nightMode(backgroundColor: Int, textColor: Int) {
-        editor.putInt("key_background_night", backgroundColor).apply()
-        editor.putInt("key_text_night", textColor).apply()
-    }
-
-    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        when (buttonView?.id) {
-            R.id.rbWhiteMode -> {
-                if (isChecked) settingsPresenterImpl.backgroundMode(1)
-                editor.putBoolean("key_white_state", isChecked).apply()
-            }
-            R.id.rbSepiaMode -> {
-                if (isChecked) settingsPresenterImpl.backgroundMode(2)
-                editor.putBoolean("key_sepia_state", isChecked).apply()
-            }
-            R.id.rbNightMode -> {
-                if (isChecked) settingsPresenterImpl.backgroundMode(3)
-                editor.putBoolean("key_night_mode", isChecked).apply()
+            R.id.rgMode -> {
+                editor.putBoolean("key_white_state", rbWhiteMode.isChecked).apply()
+                editor.putBoolean("key_sepia_state", rbSepiaMode.isChecked).apply()
+                editor.putBoolean("key_night_mode_state", rbNightMode.isChecked).apply()
             }
 
-            R.id.rbFontOne -> {
-                editor.putBoolean("key_font_one", isChecked).apply()
-            }
-            R.id.rbFontTwo -> {
-                editor.putBoolean("key_font_two", isChecked).apply()
-            }
-            R.id.rbFontThree -> {
-                editor.putBoolean("key_font_three", isChecked).apply()
+            R.id.rgFont -> {
+                editor.putBoolean("key_font_one_state", rbFontOne.isChecked).apply()
+                editor.putBoolean("key_font_two_state", rbFontTwo.isChecked).apply()
+                editor.putBoolean("key_font_three_state", rbFontThree.isChecked).apply()
             }
         }
     }
@@ -102,11 +68,7 @@ class SettingsFragment : BottomSheetDialogFragment(), SettingsContract.SettingsV
         editor.putInt("key_text_size_progress", progress).apply()
     }
 
-    override fun onStartTrackingTouch(seekBar: SeekBar?) {
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-    }
-
-    override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-    }
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 }

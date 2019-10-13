@@ -8,17 +8,16 @@ class TypeFace {
 
     private val cache = Hashtable<String, Typeface>()
 
-    operator fun get(c: Context, name: String): Typeface? {
+    operator fun get(context: Context?, name: String): Typeface? {
 
         synchronized(cache) {
             if (!cache.containsKey(name)) {
                 try {
-                    val t = Typeface.createFromAsset(c.assets, name)
+                    val t = Typeface.createFromAsset(context?.assets, name)
                     cache[name] = t
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
             }
             return cache[name]
         }

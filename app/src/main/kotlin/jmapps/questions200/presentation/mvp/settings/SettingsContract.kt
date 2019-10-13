@@ -4,16 +4,20 @@ interface SettingsContract {
 
     interface SettingsView {
 
-        fun whiteMode(backgroundColor: Int, textColor: Int)
+        fun colorMode(backgroundColor: Int, textColor: Int)
 
-        fun sepiaMode(backgroundColor: Int, textColor: Int)
+        fun typeFace(nameTypeFace: String)
 
-        fun nightMode(backgroundColor: Int, textColor: Int)
+        fun textSize(textSize: Float)
 
     }
 
     interface SettingsPresenter {
 
         fun backgroundMode(numberMode: Int)
+
+        fun typeFaceMode(numberMode: Int)
+
+        fun textSizeMode(numberMode: Int)
     }
 }
