@@ -32,6 +32,7 @@ class DatabaseLists(val context: Context) {
             if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast) {
                     val chapters = ModelChapters(
+                        cursor.getString(cursor.getColumnIndex("_id")),
                         cursor.getString(cursor.getColumnIndex("Question_number")),
                         cursor.getString(cursor.getColumnIndex("Question_content"))
                     )

@@ -4,6 +4,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:minHeight="600dp"
     android:orientation="vertical"
     tools:context=".presentation.ui.chapters.ChaptersFragment">
 
@@ -18,6 +19,18 @@
         android:text="@string/action_chapters"
         android:textColor="@color/White"
         android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/etSearchChapter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/search_view_corners"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:hint="@string/action_search_by_chapters"
+        android:padding="8dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListChapters"

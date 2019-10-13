@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:id="@+id/favoriteList"
-        android:checkable="true"
-        android:icon="@drawable/ic_star_favorites_false"
-        android:title="@string/action_favorites"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/settings"
         android:title="@string/action_settings"
         app:showAsAction="never" />
