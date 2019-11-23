@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:minHeight="600dp"
     android:orientation="vertical"
-    tools:context=".presentation.ui.chapters.ChaptersFragment">
+    tools:context=".presentation.ui.chapters.ChaptersBottomSheet">
 
     <TextView
         android:id="@+id/tvChaptersDescription"

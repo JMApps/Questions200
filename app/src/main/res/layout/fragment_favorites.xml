@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:minHeight="600dp"
     android:orientation="vertical"
-    tools:context=".presentation.ui.favorites.FavoritesFragment">
+    tools:context=".presentation.ui.favorites.FavoritesBottomSheet">
 
     <TextView
         android:id="@+id/tvFavoritesDescription"

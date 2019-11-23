@@ -14,7 +14,7 @@ import jmapps.questions200.R
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
-class SettingsFragment : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener,
+class SettingsBottomSheet : BottomSheetDialogFragment(), SeekBar.OnSeekBarChangeListener,
     RadioGroup.OnCheckedChangeListener {
 
     private lateinit var rootSettings: View

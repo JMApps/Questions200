@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import jmapps.questions200.R
 
-class AboutUs : BottomSheetDialogFragment() {
+class AboutUsBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var rootAbout: View
 

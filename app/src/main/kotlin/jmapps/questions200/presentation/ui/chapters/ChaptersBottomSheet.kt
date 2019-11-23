@@ -13,7 +13,7 @@ import jmapps.questions200.R
 import jmapps.questions200.data.database.DatabaseLists
 import kotlinx.android.synthetic.main.fragment_chapters.view.*
 
-class ChaptersFragment : BottomSheetDialogFragment(), AdapterChapters.OnItemChapterClick,
+class ChaptersBottomSheet : BottomSheetDialogFragment(), AdapterChapters.OnItemChapterClick,
     TextWatcher {
 
     private lateinit var rootChapters: View

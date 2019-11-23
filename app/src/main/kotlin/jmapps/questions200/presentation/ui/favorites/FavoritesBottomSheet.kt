@@ -11,7 +11,7 @@ import jmapps.questions200.R
 import jmapps.questions200.data.database.DatabaseLists
 import kotlinx.android.synthetic.main.fragment_favorites.view.*
 
-class FavoritesFragment : BottomSheetDialogFragment(), AdapterFavorites.OnItemFavoriteClick {
+class FavoritesBottomSheet : BottomSheetDialogFragment(), AdapterFavorites.OnItemFavoriteClick {
 
     private lateinit var rootFavorites: View
     private lateinit var favorites: MutableList<ModelFavorites>
