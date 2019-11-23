@@ -50,8 +50,6 @@ class MainPresenterImpl(
                 strQuestionContent = mainCursor.getString(1)
                 strAnswerContent = mainCursor.getString(2)
 
-                mainView?.showQuestionNumber(strQuestionNumber)
-                mainView?.showQuestionContent(strQuestionContent)
                 mainView?.showAnswerContent(strAnswerContent)
             }
 
@@ -150,11 +148,8 @@ class MainPresenterImpl(
     override fun copyContent() {
         myClipboard = context?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
 
-        myClip = newPlainText(
-            "", Html.fromHtml(
-                "$strQuestionNumber<br/>$strQuestionContent<p/>ОТВЕТ<br/>$strAnswerContent"
-            )
-        )
+        myClip = newPlainText("", Html.fromHtml(
+                "$strQuestionNumber<br/>$strQuestionContent<p/>ОТВЕТ<p/>$strAnswerContent"))
 
         myClipboard?.setPrimaryClip(myClip!!)
         mainView?.showCopyToast()

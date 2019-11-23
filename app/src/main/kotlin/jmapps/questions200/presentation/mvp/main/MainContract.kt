@@ -8,10 +8,6 @@ interface MainContract {
 
         fun showDatabaseExceptions(e: String)
 
-        fun showQuestionNumber(number: String)
-
-        fun showQuestionContent(content: String)
-
         fun showAnswerContent(content: String)
 
         fun showFavoriteState(state: Boolean)
