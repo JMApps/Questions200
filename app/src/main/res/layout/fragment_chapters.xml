@@ -4,7 +4,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="600dp"
+    android:minHeight="1000dp"
     android:orientation="vertical"
     tools:context=".presentation.ui.chapters.ChaptersBottomSheet">
 

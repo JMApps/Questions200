@@ -4,7 +4,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="600dp"
+    android:minHeight="1000dp"
     android:orientation="vertical"
     tools:context=".presentation.ui.favorites.FavoritesBottomSheet">
 
@@ -28,7 +28,7 @@
         android:drawablePadding="16dp"
         android:gravity="center"
         android:layout_gravity="center"
-        android:minHeight="500dp"
+        android:minHeight="950dp"
         android:padding="48dp"
         android:text="@string/action_favorite_list_empty"
         android:textSize="20sp" />
