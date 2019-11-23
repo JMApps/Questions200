@@ -24,7 +24,7 @@ class FavoritesFragment : BottomSheetDialogFragment(), AdapterFavorites.OnItemFa
 
         favorites = DatabaseLists(context!!).getFavoriteList
 
-        val verticalLayout = LinearLayoutManager(context)
+        val verticalLayout = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         rootFavorites.rvListFavorites.layoutManager = verticalLayout
 
         adapterFavorites = AdapterFavorites(favorites, this)

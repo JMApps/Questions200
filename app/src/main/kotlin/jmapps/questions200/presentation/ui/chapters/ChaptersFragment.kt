@@ -27,7 +27,7 @@ class ChaptersFragment : BottomSheetDialogFragment(), AdapterChapters.OnItemChap
 
         chapters = DatabaseLists(context!!).getChapterList
 
-        val verticalLayout = LinearLayoutManager(context)
+        val verticalLayout = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         rootChapters.rvListChapters.layoutManager = verticalLayout
 
         adapterChapters = AdapterChapters(chapters, this)
