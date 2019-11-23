@@ -50,10 +50,7 @@ class PlaceholderFragment : Fragment(), MainContract.MainView,
     }
 
     @SuppressLint("SetTextI18n", "CommitPrefEdits")
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootMain = inflater.inflate(R.layout.fragment_main, container, false)
 
         sectionNumber = arguments?.getInt(ARG_SECTION_NUMBER)
@@ -70,8 +67,7 @@ class PlaceholderFragment : Fragment(), MainContract.MainView,
         settingsPresenterImpl = SettingsPresenterImpl(this)
         mainPresenterImpl.showContentFromDatabase()
 
-        rootMain.tbFavorites.isChecked =
-            preferences.getBoolean("key_main_favorite_$sectionNumber", false)
+        rootMain.tbFavorites.isChecked = preferences.getBoolean("key_main_favorite_$sectionNumber", false)
         rootMain.btnCopyContent.setOnClickListener(this)
         rootMain.tbFavorites.setOnCheckedChangeListener(this)
 
@@ -82,22 +78,9 @@ class PlaceholderFragment : Fragment(), MainContract.MainView,
         return rootMain
     }
 
-    override fun showQuestionNumber(number: String) {
-        rootMain.tvQuestionNumber.text = number
-    }
-
-    override fun showQuestionContent(content: String) {
-        rootMain.tvQuestionContent.movementMethod = LinkMovementMethod.getInstance()
-        rootMain.tvQuestionContent.setText(
-            mainPresenterImpl.stringBuilder(content),
-            TextView.BufferType.SPANNABLE
-        )
-    }
-
     override fun showAnswerContent(content: String) {
         rootMain.tvAnswerContent.movementMethod = LinkMovementMethod.getInstance()
-        rootMain.tvAnswerContent.setText(
-            mainPresenterImpl.stringBuilder(content),
+        rootMain.tvAnswerContent.setText(mainPresenterImpl.stringBuilder(content),
             TextView.BufferType.SPANNABLE
         )
     }
@@ -128,17 +111,14 @@ class PlaceholderFragment : Fragment(), MainContract.MainView,
 
     override fun colorMode(backgroundColor: Int, textColor: Int) {
         rootMain.mainConstraint.setBackgroundColor(backgroundColor)
-        rootMain.tvQuestionContent.setTextColor(textColor)
         rootMain.tvAnswerContent.setTextColor(textColor)
     }
 
     override fun typeFace(nameTypeFace: String) {
-        rootMain.tvQuestionContent.typeface = TypeFace()[context, nameTypeFace]
         rootMain.tvAnswerContent.typeface = TypeFace()[context, nameTypeFace]
     }
 
     override fun textSize(textSize: Float) {
-        rootMain.tvQuestionContent.textSize = textSize!!
         rootMain.tvAnswerContent.textSize = textSize
     }
 
