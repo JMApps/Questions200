@@ -33,11 +33,10 @@ class MainActivity : AppCompatActivity(), OtherContract.OtherView, ChaptersBotto
     private lateinit var preferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
 
-    private lateinit var database: SQLiteDatabase
+    private var database: SQLiteDatabase? = null
     private lateinit var otherPresenter: OtherPresenterImpl
 
     private lateinit var stringBuilders: StringBuilders
-
     private lateinit var chapterList: MutableList<ModelChapters>
 
     @SuppressLint("CommitPrefEdits")
@@ -174,7 +173,7 @@ class MainActivity : AppCompatActivity(), OtherContract.OtherView, ChaptersBotto
     }
 
     private fun closeDatabase() {
-        database.close()
+        database?.close()
     }
 
     private fun setTextContent(position: Int) {
